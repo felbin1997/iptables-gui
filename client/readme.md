@@ -1,0 +1,1 @@
+Die Clientanwendung um auf jedem verwaltenden server installiert zu werden, und mit dem server zu kommunizieren
