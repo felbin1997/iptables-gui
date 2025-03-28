@@ -6,29 +6,26 @@ import axios from "axios";
 export default function Rules() {
   const { ip } = useParams();
   const [rules, setRules] = useState([]);
-  const [editedRules, setEditedRules] = useState({}); // Speichert bearbeitete Regeln
+  const [editedRules, setEditedRules] = useState({}); 
   const [loading, setLoading] = useState(false);
-  const [showSaveBanner, setShowSaveBanner] = useState(false); // Steuert Banner-Anzeige
+  const [showSaveBanner, setShowSaveBanner] = useState(false); 
 
-  // Regeln abrufen
   useEffect(() => {
     axios.get(`http://${ip}:8001/api/v1/v4filter/input`)
       .then(response => setRules(response.data))
       .catch(error => console.error("Fehler beim Laden:", error));
   }, []);
 
-  // Änderungen speichern & Banner anzeigen
   const handleChange = (index, field, value) => {
     setEditedRules(prevState => ({
       ...prevState,
       [index]: { ...prevState[index], [field]: value, num: rules[index].num }
     }));
-    setShowSaveBanner(true); // Banner anzeigen, sobald eine Änderung vorgenommen wurde
+    setShowSaveBanner(true); 
   };
 
-  // Einzelne Regel speichern (POST Anfrage)
   const handleSave = async (index) => {
-    const updatedRule = editedRules[index] || rules[index]; // Entweder geänderte oder Originalregel
+    const updatedRule = editedRules[index] || rules[index]; 
     setLoading(true);
     try {
       await axios.post(`http://${ip}:8001/api/v1/v4filter/${rules[index].chain}/${rules[index].num}`, updatedRule);
@@ -44,7 +41,6 @@ export default function Rules() {
     setLoading(false);
   };
 
-  // Regel löschen (DELETE Anfrage)
   const handleDelete = async (index) => {
     const ruleToDelete = rules[index];
     setLoading(true);
@@ -57,16 +53,14 @@ export default function Rules() {
     setLoading(false);
   };
 
-  // Alle geänderten Regeln speichern (POST an /save7v4filters)
   const handleSaveAll = async () => {
     setLoading(true);
     try {
-      const updatedRules = Object.values(editedRules); // Nur geänderte Regeln senden
+      const updatedRules = Object.values(editedRules); 
       console.log("Speichere Änderungen:", updatedRules);
 
       await axios.post(`http://${ip}:8001/api/v1/save/v4filters`, updatedRules);
 
-      // Regeln aktualisieren & Banner ausblenden
       setRules(prevRules =>
         prevRules.map(rule =>
           updatedRules.find(updatedRule => updatedRule.num === rule.num) || rule
@@ -82,7 +76,6 @@ export default function Rules() {
 
   return (
     <div className="p-4">
-      {/* Orangenes Banner mit Speichern-Button */}
       {showSaveBanner && (
         <div className="bg-orange-500 text-white text-center p-2 mb-4 flex justify-between items-center">
           <span>Es gibt ungespeicherte Änderungen!</span>

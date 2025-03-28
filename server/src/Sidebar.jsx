@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { ChevronDown, ChevronUp } from "lucide-react"; // Icons für das Dropdown (npm install lucide-react)
+import { ChevronDown, ChevronUp } from "lucide-react"; 
 
 export default function Sidebar() {
-  const [pcs, setPcs] = useState([]);       // PC-Liste von /neighbours
-  const [openPcs, setOpenPcs] = useState({}); // Steuert das Dropdown für Filter
+  const [pcs, setPcs] = useState([]);      
+  const [openPcs, setOpenPcs] = useState({}); 
 
   // PCs laden
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function Sidebar() {
       .catch(error => console.error("Fehler beim Laden der PCs:", error));
   },[]);
   const loadFilters = (pc) => {
-    setOpenPcs(prevState => ({ ...prevState, [pc]: !prevState[pc] })); // Öffnet oder schließt das Menü
+    setOpenPcs(prevState => ({ ...prevState, [pc]: !prevState[pc] }));
   };
 
   return (

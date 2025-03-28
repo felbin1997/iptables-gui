@@ -18,7 +18,6 @@ class Receiver:
             
             
             if message.startswith("APP_ADDRESS:"):
-                # IP extrahieren
                 parts = message.strip().split(":")
                 if len(parts) != 3:
                     return True, "Ungültiges Adressformat"
@@ -27,7 +26,6 @@ class Receiver:
             else:
                 ip = message.strip()
 
-            # Bestehende Daten laden
             try:
                 with open(json_file, "r") as file:
                     data = json.load(file)
@@ -40,7 +38,6 @@ class Receiver:
             if ip in data["ips"]:
                 return False, "IP Already known"
 
-            # IP hinzufügen und speichern
             data["ips"].append(ip)
             with open(json_file, "w") as file:
                 json.dump(data, file, indent=4)

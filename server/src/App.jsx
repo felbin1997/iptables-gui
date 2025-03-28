@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="ml-64 p-6 flex-1"> {/* Content verschiebt sich neben die Sidebar */}
+      <div className="ml-64 p-6 flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/:ip/rules" element={<Rules />} />

@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 import asyncio
 from flask_cors import CORS
 
-#from iptables_interface import *
 from iptables_interface import IPv4
 import threading
 from receiver import Receiver
@@ -85,11 +84,10 @@ def get_neighbours():
 
             neighbours = []
 
-            # Überprüfe, ob die JSON-Struktur das "neighbours"-Feld enthält
             for entry in data["ips"]:
                 neighbours.append(entry)
 
-            return jsonify({"status": True, "data": neighbours})  # Rückgabe des Nachbarn-Dictionarys
+            return jsonify({"status": True, "data": neighbours})  
     except Exception as e:
         return jsonify({"status": False, "error": e.args})
 
@@ -100,9 +98,6 @@ def get_neighbours():
 #####################################
 
 if __name__ == '__main__':
-    #listener_thread = threading.Thread(target=Broadcaster.start_dbus_listener, daemon=True)
-    #listener_thread.start()
-
     Broadcaster.broadcast_ip()
 
     listener_thread = threading.Thread(target=Receiver.listen_for_broadcast, daemon=True)

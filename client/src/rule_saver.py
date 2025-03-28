@@ -30,8 +30,8 @@ class iptabels_saver:
                 rules = json.load(json_file)
                 print(f"iptables-Regeln erfolgreich aus {iptabels_saver.filename} geladen.")
 
-                for chain, rule_list in rules.items():  # Über alle Ketten iterieren
-                    for rule in rule_list:  # Jede Regel innerhalb der Kette verarbeiten
+                for chain, rule_list in rules.items():  
+                    for rule in rule_list: 
                         success, message = IPv4.add_v4_rule(
                             source=rule.get("source", "0.0.0.0/0"),
                             destination=rule.get("destination", "0.0.0.0/0"),

@@ -39,7 +39,7 @@ class IPv4:
 
     @staticmethod
     def extract_v4_line_data(v4_line, chain):
-        # Zerlege die ersten Spalten mit fester Breite
+        # Split the line into parts
         parts = v4_line.split(maxsplit=10)  # First 9 columns are fixed width, the rest is the rest of the line        
         # Dictionary with all data
         rule_dict = {

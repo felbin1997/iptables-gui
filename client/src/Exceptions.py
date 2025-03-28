@@ -1,7 +1,6 @@
 
 
 class MethodNotImplementedError(Exception):
-    # Eine Exception für Methoden die noch nicht implementiert wurden
     def __init__(self):
         super().__init__("This Method is not implemented yet")
 
@@ -27,7 +26,7 @@ class IptablesError(Exception):
 
     def _get_friendly_message(self, known_errors):
         """
-        Sucht in bekannten Fehlermeldungen nach einer verständlichen Erklärung.
+        Looks for known errors in the error message and returns a friendly message.
         """
         for known_error, explanation in known_errors.items():
             if known_error in self.raw_message:

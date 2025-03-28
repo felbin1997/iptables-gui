@@ -38,23 +38,3 @@ class Broadcaster:
     def network_changed(*args):
         Broadcaster.broadcast_ip()
 
-    @staticmethod
-    def start_dbus_listener():
-        bus = SystemBus()
-        try:
-            nm = bus.get("org.freedesktop.network1")  # systemd-networkd verwenden
-            nm.onPropertiesChanged = Broadcaster.network_changed  # Signal für Änderungen
-
-            print("Start Broadcaster......")
-            loop = GLib.MainLoop()
-            Broadcaster.dbus_loop = loop
-            GLib.idle_add(loop.run)
-            print("Broadcaster started.......")
-
-        except Exception as e:
-            print("Fehler beim Zugriff auf systemd-networkd:", e)
-            return
-
-# Starte den D-Bus Listener
-if __name__ == "__main__":
-    Broadcaster.start_dbus_listener()
