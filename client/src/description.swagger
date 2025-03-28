@@ -1,0 +1,416 @@
+openapi: 3.1.0
+info:
+  title: iptables interface
+  description: |-
+
+  termsOfService: 
+  contact:
+    email: felix@media-bindewald.de
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://10.3.0.70:8001/api/v1/
+tags:
+  - name: v4filter
+    description: Everything to do with IPv4 Filters
+  - name: portknocking
+    description: Port-Knocking ermoeglicht den Zugang zu bestimmten Ports nur nach einer definierten Reihenfolge von Anfragen.
+  - name: info
+    description: sends back information about the current system
+  - name: known_systems
+    description: sends back infos about systems in the current subnet
+paths:
+  /v4filter/{chain}:
+    put:
+      tags:
+        - v4filter
+      summary: Add IPv4 Filters to a chain
+      parameters:
+        - name: chain
+          in: path
+          description: Name of the Chain which should be shown
+          required: true
+          schema:
+            type: string
+      description: Add a v4Filter Rule
+      responses:
+        '200':
+          description: Sends back all rules from the chain
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ipv4rule'
+    get:
+      tags:
+        - v4filter
+      summary: Get IPv4 Filters of the system
+      description: Returns a single pet
+      operationId: getPetById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+      security:
+        - api_key: []
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /v4filter/{chain}/{filter_line}:
+    post:
+      tags:
+        - v4filter
+      summary: Change options of the IPv4 Filter
+      description: ''
+      operationId: uploadFile
+      parameters:
+        - name: filter_line
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: chain
+          in: path
+          description: Additional Metadata
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+    delete:
+      tags:
+        - v4filter
+      summary: Delete a IPv4 Filter
+      parameters:
+        - name: filter_line
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+  /v4filter/{chain}/{filter_line}/enable:
+    patch:
+      tags:
+          - v4filter
+      summary: enable IPv4 Filter rule
+      parameters:
+        - name: filter_line
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: chain
+          in: path
+          description: firewall chain to select
+          required: true
+          schema:
+            type: string
+  
+  /v4filter/{chain}/{filter_line}/disable:
+    patch:
+      tags:
+          - v4filter
+      summary: disable IPv4 Filter rule
+      parameters:
+        - name: filter_line
+          in: path
+          description: ID of pet to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: chain
+          in: path
+          description: firewall chain to select
+          required: true
+          schema:
+            type: string
+  
+  /portknocking:
+    post:
+      tags:
+        - portknocking
+      summary: Returns pet inventories by status
+      description: Returns a map of status codes to quantities
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - portknocking
+      summary: Returns pet inventories by status
+      description: Returns a map of status codes to quantities
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+                  format: int32
+      security:
+        - api_key: []
+
+  /info/status:
+    get:
+      tags: 
+        - info
+      summary: get the status of the current system
+  /info/identification:
+    get:
+      tags:
+        - info
+      summary: get the id of the current system
+
+  /known_systems:
+    get:
+      tags:
+        - known_systems
+      summary: get all information of all other systems in the network
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 100000
+        username:
+          type: string
+          example: fehguy
+        address:
+          type: array
+          xml:
+            name: addresses
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Address'
+      xml:
+        name: customer
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 437 Lytton
+        city:
+          type: string
+          example: Palo Alto
+        state:
+          type: string
+          example: CA
+        zip:
+          type: string
+          example: '94301'
+      xml:
+        name: address
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    Pet:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: doggie
+        category:
+          $ref: '#/components/schemas/Category'
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+            - available
+            - pending
+            - sold
+      xml:
+        name: pet
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/User'
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

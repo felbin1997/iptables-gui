@@ -1,2 +1,29 @@
 myenv
-__pycache__
+client/iptablesApiServer
+client/iptablesApiServer/*
+client/iptablesApiServer.deb
+
+client/src/__pycache__
+client/src/venv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+*.sqlite3
+
+# Node/JS
+server/node_modules/
+server/dist/
+server/build/
+
+# System
+.DS_Store
+*.log
+
+# Geheimnisse
+.env
+data/neighbours.json

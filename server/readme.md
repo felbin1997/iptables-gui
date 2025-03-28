@@ -1,1 +1,0 @@
-Die Server Anwendung welche den Hauptteil der Weboberfläche beinhaltet und mit jedem client kommuniziert
