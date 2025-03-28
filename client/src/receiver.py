@@ -12,19 +12,20 @@ class Receiver:
     @staticmethod
     def receive_ips(message):
         json_file = "data/neighbours.json"
-        os.makedirs("data", exist_ok=True)  # Stelle sicher, dass der Ordner existiert
+        os.makedirs("data", exist_ok=True) 
 
         try:
-            # Nur weitermachen, wenn Format stimmt
-            if not message.startswith("APP_ADDRESS:"):
-                return False, "Unerkanntes Format"
+            
+            
+            if message.startswith("APP_ADDRESS:"):
+                # IP extrahieren
+                parts = message.strip().split(":")
+                if len(parts) != 3:
+                    return True, "Ungültiges Adressformat"
 
-            # IP extrahieren
-            parts = message.strip().split(":")
-            if len(parts) != 3:
-                return False, "Ungültiges Adressformat"
-
-            ip = parts[1]  # z.B. "10.3.0.111"
+                ip = parts[1] 
+            else:
+                ip = message.strip()
 
             # Bestehende Daten laden
             try:

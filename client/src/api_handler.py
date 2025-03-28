@@ -100,14 +100,16 @@ def get_neighbours():
 #####################################
 
 if __name__ == '__main__':
+    #listener_thread = threading.Thread(target=Broadcaster.start_dbus_listener, daemon=True)
+    #listener_thread.start()
+
+    Broadcaster.broadcast_ip()
+
     listener_thread = threading.Thread(target=Receiver.listen_for_broadcast, daemon=True)
     listener_thread.start()
-    
-    listener_thread = threading.Thread(target=Broadcaster.start_dbus_listener, daemon=True)
-    listener_thread.start()
 
-    print(Receiver.receive_ips("10.3.0.70"))
-    print(iptabels_saver.load_iptables_from_json())
+    print(f" Errors in adding IP: {Receiver.receive_ips(Broadcaster.get_own_ip())}")
+    print(f" Errors in loading Rules: {iptabels_saver.load_iptables_from_json()}")
 
     print("Starting Flask App.....")
     app.run(host='0.0.0.0', port=8001, debug=True)

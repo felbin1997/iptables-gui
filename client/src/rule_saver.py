@@ -50,4 +50,4 @@ class iptabels_saver:
         except Exception as e:
             print(f"Unerwarteter Fehler beim Laden von {iptabels_saver.filename}: {e}")
 
-        return False, "error" 
+        return False, "no error" 

@@ -9,7 +9,7 @@ export default function Sidebar() {
 
   // PCs laden
   useEffect(() => {
-    axios.get("http://10.3.0.70:8001/api/v1/neighbours")
+    axios.get(`http://${window.location.hostname}:8001/api/v1/neighbours`)
       .then(response => setPcs(response.data.data))
       .catch(error => console.error("Fehler beim Laden der PCs:", error));
   },[]);
